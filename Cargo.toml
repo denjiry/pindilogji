@@ -1,7 +1,7 @@
 [package]
 version = "0.1.0"
-name = "hoge"
-repository = "https://github.com/seed-rs/seed-quickstart"
+name = "pindilogji"
+repository = "https://github.com/denjiry/pindilogji"
 authors = ["kento tajiri <k.denjiry@gmail.com>"]
 description = "App Description"
 categories = ["category"]
@@ -18,7 +18,7 @@ wasm-bindgen-test = "0.3.13"
 [dependencies]
 # This commit points to Seed 0.7.0 with important fixes.
 # Replace with `seed = "0.8.0"` (or newer) once released.
-seed = { git = "https://github.com/seed-rs/seed", rev = "0a538f0" }
+seed = "*"
 
 [profile.release]
 lto = true
