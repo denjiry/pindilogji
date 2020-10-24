@@ -62,10 +62,9 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
 //     View
 // ------ ------
 
-fn view_cell(model: &Model) -> Node<Msg> {
-    let term = &model.terms[0];
+fn view_term(term: &Term) -> Node<Msg> {
     div![
-        C!["cell"],
+        C!["term"],
         input![
             C!["input"],
             attrs! {
@@ -79,8 +78,12 @@ fn view_cell(model: &Model) -> Node<Msg> {
 // (Remove the line below once your `Model` become more complex.)
 #[allow(clippy::trivially_copy_pass_by_ref)]
 // `view` describes what to display.
-fn view(model: &Model) -> Node<Msg> {
-    view_cell(model)
+fn view(model: &Model) -> Vec<Node<Msg>> {
+    let mut ret: Vec<Node<Msg>> = vec![];
+    for term in &model.terms {
+        ret.push(view_term(term));
+    }
+    ret
 }
 
 // ------ ------
