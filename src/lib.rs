@@ -11,31 +11,50 @@ use seed::{prelude::*, *};
 
 // `init` describes what should happen when your app started.
 fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
-    Model::default()
+    Model {
+        terms: vec![Term::new()],
+    }
 }
 
 // ------ ------
 //     Model
 // ------ ------
+type RawWord = String;
+type Lambda = String;
+struct Term {
+    word: RawWord,
+    lambda: Lambda,
+}
+
+impl Term {
+    fn new() -> Self {
+        Term {
+            word: RawWord::default(),
+            lambda: Lambda::default(),
+        }
+    }
+}
 
 // `Model` describes our app state.
-type Model = i32;
+struct Model {
+    terms: Vec<Term>,
+}
 
 // ------ ------
 //    Update
 // ------ ------
 
 // (Remove the line below once any of your `Msg` variants doesn't implement `Copy`.)
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 // `Msg` describes the different events you can modify state with.
 enum Msg {
-    Increment,
+    CreateTerm,
 }
 
 // `update` describes how to handle each `Msg`.
 fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     match msg {
-        Msg::Increment => *model += 1,
+        Msg::CreateTerm => model.terms.push(Term::new()),
     }
 }
 
@@ -43,15 +62,25 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
 //     View
 // ------ ------
 
+fn view_cell(model: &Model) -> Node<Msg> {
+    let term = &model.terms[0];
+    div![
+        C!["cell"],
+        input![
+            C!["input"],
+            attrs! {
+                At::Value => term.word,
+            }
+        ],
+        term.lambda.to_string(),
+    ]
+}
+
 // (Remove the line below once your `Model` become more complex.)
 #[allow(clippy::trivially_copy_pass_by_ref)]
 // `view` describes what to display.
 fn view(model: &Model) -> Node<Msg> {
-    div![
-        "This is a counter: ",
-        C!["counter"],
-        button![model, ev(Ev::Click, |_| Msg::Increment),],
-    ]
+    view_cell(model)
 }
 
 // ------ ------
