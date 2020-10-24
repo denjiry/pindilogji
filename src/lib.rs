@@ -19,17 +19,16 @@ fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
 // ------ ------
 //     Model
 // ------ ------
-type RawWord = String;
 type Lambda = String;
 struct Term {
-    word: RawWord,
+    word: String,
     lambda: Lambda,
 }
 
 impl Term {
     fn new() -> Self {
         Term {
-            word: RawWord::default(),
+            word: String::default(),
             lambda: Lambda::default(),
         }
     }
