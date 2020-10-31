@@ -74,8 +74,6 @@ fn view_term(term: &Term) -> Node<Msg> {
     ]
 }
 
-// (Remove the line below once your `Model` become more complex.)
-#[allow(clippy::trivially_copy_pass_by_ref)]
 // `view` describes what to display.
 fn view(model: &Model) -> Vec<Node<Msg>> {
     let mut ret: Vec<Node<Msg>> = vec![];
