@@ -9,5 +9,8 @@ license = "MIT"
 readme = "./README.md"
 edition = "2018"
 
+[dependencies]
+subprocess = "*"
+
 [workspace]
 members = [ "pindilogji-ui" ]
