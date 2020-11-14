@@ -1,6 +1,6 @@
 [package]
 version = "0.1.0"
-name = "pindilogji"
+name = "pindilogji-ui"
 repository = "https://github.com/denjiry/pindilogji"
 authors = ["kento tajiri <k.denjiry@gmail.com>"]
 description = "App Description"

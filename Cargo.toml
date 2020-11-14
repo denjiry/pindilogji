@@ -1,0 +1,13 @@
+[package]
+name = "pindilogji"
+version = "0.1.0"
+repository = "https://github.com/denjiry/pindilogji"
+authors = ["kento tajiri <k.denjiry@gmail.com>"]
+description = "App Description"
+categories = ["category"]
+license = "MIT"
+readme = "./README.md"
+edition = "2018"
+
+[workspace]
+members = [ "pindilogji-ui" ]
