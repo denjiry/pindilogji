@@ -1,5 +1,6 @@
 use pindilogji::lightblue;
 
 fn main() {
-    lightblue();
+    let input = "太郎はカステラが好きだ。";
+    lightblue(input);
 }

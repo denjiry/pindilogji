@@ -1,7 +1,6 @@
 use subprocess::{Exec, Redirection};
 
-pub fn lightblue() {
-    let input = "太郎はカステラが好きだ。";
+pub fn lightblue(input: &str) {
     let command = format!("echo {} | lightblue parse -s xml", input);
     let captured = Exec::shell(command)
         .stdout(Redirection::Pipe)
