@@ -1,3 +1,4 @@
+mod xml_parse;
 use subprocess::{Exec, Redirection};
 
 pub fn lightblue(input: &str) {
@@ -6,5 +7,7 @@ pub fn lightblue(input: &str) {
         .stdout(Redirection::Pipe)
         .capture()
         .expect("lightblue maybe exists");
-    dbg!(captured.stdout_str());
+    let xml = captured.stdout_str();
+    let sentences = xml_parse::parse(&xml);
+    dbg!(sentences);
 }
