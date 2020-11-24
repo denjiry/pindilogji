@@ -58,8 +58,18 @@ pub struct Sentence {
 pub struct Sentences {
     pub sentence: Vec<Sentence>,
 }
+#[derive(Debug, Deserialize)]
+pub struct Document {
+    pub id: String,
+    pub sentences: Sentences,
+}
 
-pub fn parse(input: &str) -> Result<Vec<Sentence>, serde_xml_rs::Error> {
+#[derive(Debug, Deserialize)]
+pub struct Root {
+    pub document: Document,
+}
+
+pub fn parse(input: &str) -> Result<Root, serde_xml_rs::Error> {
     use serde_xml_rs::from_str;
     from_str(input)
 }

@@ -7,7 +7,7 @@ pub fn lightblue(input: &str) {
         .stdout(Redirection::Pipe)
         .capture()
         .expect("lightblue maybe exists");
-    let xml = captured.stdout_str();
-    let sentences = xml_parse::parse(&xml);
-    dbg!(sentences);
+    let xml_str = captured.stdout_str();
+    let xml_struct = xml_parse::parse(&xml_str);
+    dbg!(xml_struct);
 }
