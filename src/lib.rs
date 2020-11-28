@@ -11,12 +11,12 @@ pub fn lightblue(input: &str) -> Result<(), Error> {
         .expect("lightblue should exists");
     let err = &captured.stderr_str();
     let xml_str = captured.stdout_str();
-    dbg!(&err.is_empty());
-    if err.is_empty() {
-        return Err(Error::new(ErrorKind::Other, "lightblue error"));
+    if !err.is_empty() {
+        return Err(Error::new(
+            ErrorKind::Other,
+            format!("lightblue error: {}", err),
+        ));
     }
-    dbg!(err);
-    dbg!(&xml_str);
     let xml_struct = xml_parse::parse(&xml_str);
     dbg!(xml_struct);
     Ok(())
