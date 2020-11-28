@@ -9,17 +9,17 @@ pub fn lightblue(input: &str) -> Result<(), io::Error> {
         .stderr(Redirection::Pipe)
         .capture()
         .expect("lightblue should exists");
-    let err = &captured.stderr_str();
+    let command_err = &captured.stderr_str();
     let xml_str = captured.stdout_str();
-    if !err.is_empty() {
+    if !command_err.is_empty() {
         return Err(io::Error::new(
             io::ErrorKind::Other,
-            format!("lightblue error: {}", err),
+            format!("lightblue error: {}", command_err),
         ));
     }
     let xml_struct = xml_parse::parse(&xml_str)
-        .expect("xml parsing should success (assuming correct xml_structure)");
-
-    dbg!(xml_struct);
+        .expect("xml parsing should success (assuming correct xml structure)");
+    let parsed_input = xml_struct.document.sentences.sentence;
+    dbg!(parsed_input);
     Ok(())
 }
