@@ -2,7 +2,7 @@ mod xml_parse;
 use std::io;
 use subprocess::{Exec, Redirection};
 
-pub fn lightblue(input: &str) -> Result<(), io::Error> {
+pub fn lightblue(input: &str) -> Result<xml_parse::Sentence, io::Error> {
     let command = format!("echo {} | lightblue parse -s xml", input);
     let captured = Exec::shell(command)
         .stdout(Redirection::Pipe)
@@ -17,9 +17,10 @@ pub fn lightblue(input: &str) -> Result<(), io::Error> {
             format!("lightblue error: {}", command_err),
         ));
     }
-    let xml_struct = xml_parse::parse(&xml_str)
+    let mut xml_struct = xml_parse::parse(&xml_str)
         .expect("xml parsing should success (assuming correct xml structure)");
-    let parsed_input = xml_struct.document.sentences.sentence;
-    dbg!(parsed_input);
-    Ok(())
+    let parsed_input = xml_struct.document.sentences.sentence.pop().expect(
+        "assuming lightblue always return one sentence even it have two more input sentences",
+    );
+    Ok(parsed_input)
 }
