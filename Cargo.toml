@@ -16,4 +16,4 @@ serde_derive = "*"
 subprocess = "*"
 
 [workspace]
-members = [ "pindilogji-ui" ]
+members = [ "pindilogji-ui", "pindilogji-server" ]
