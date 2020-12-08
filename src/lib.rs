@@ -2,7 +2,9 @@ mod xml_parse;
 use std::io;
 use subprocess::{Exec, Redirection};
 
-pub fn lightblue(input: &str) -> Result<xml_parse::Sentence, io::Error> {
+pub fn lightblue(
+    input: &str,
+) -> Result<xml_parse::Sentence, Box<dyn std::error::Error + Send + Sync + 'static>> {
     let command = format!("echo {} | lightblue parse -s xml", input);
     let captured = Exec::shell(command)
         .stdout(Redirection::Pipe)
@@ -15,7 +17,8 @@ pub fn lightblue(input: &str) -> Result<xml_parse::Sentence, io::Error> {
         return Err(io::Error::new(
             io::ErrorKind::Other,
             format!("lightblue error: {}", command_err),
-        ));
+        )
+        .into());
     }
     let mut xml_struct = xml_parse::parse(&xml_str)
         .expect("xml parsing should success (assuming correct xml structure)");
