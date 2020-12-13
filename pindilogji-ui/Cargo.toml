@@ -18,7 +18,7 @@ wasm-bindgen-test = "0.3.13"
 [dependencies]
 # This commit points to Seed 0.7.0 with important fixes.
 # Replace with `seed = "0.8.0"` (or newer) once released.
-seed = "*"
+seed = "0.8.0"
 
 [profile.release]
 lto = true
