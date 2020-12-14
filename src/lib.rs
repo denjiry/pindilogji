@@ -8,6 +8,14 @@ fn parse_lightblue_sr(input: String) -> String {
             top_level_sr = line;
         }
     }
+    let top_level_sr = top_level_sr
+        .splitn(3, ' ')
+        .last()
+        .expect("top_level_sr should not be empty.");
+    let top_level_sr = top_level_sr
+        .rsplitn(2, ' ')
+        .last()
+        .expect("top_level_sr should not be empty.");
     top_level_sr.to_owned()
 }
 
