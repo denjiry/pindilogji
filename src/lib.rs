@@ -1,6 +1,16 @@
 use std::io;
 use subprocess::{Exec, Redirection};
 
+fn parse_lightblue_sr(input: String) -> String {
+    let mut top_level_sr = "";
+    for (i, line) in input.lines().enumerate() {
+        if i == 3 {
+            top_level_sr = line;
+        }
+    }
+    top_level_sr.to_owned()
+}
+
 pub fn lightblue(
     input: &str,
 ) -> Result<String, Box<dyn std::error::Error + Send + Sync + 'static>> {
@@ -19,5 +29,6 @@ pub fn lightblue(
         )
         .into());
     }
-    Ok(output)
+    let semantic_representation = parse_lightblue_sr(output);
+    Ok(semantic_representation)
 }
