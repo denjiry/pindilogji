@@ -1,4 +1,3 @@
-mod xml_parse;
 use std::io;
 use subprocess::{Exec, Redirection};
 
