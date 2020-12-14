@@ -19,10 +19,5 @@ pub fn lightblue(
         )
         .into());
     }
-    let mut xml_struct = xml_parse::parse(&xml_str)
-        .expect("xml parsing should success (assuming correct xml structure)");
-    let parsed_input = xml_struct.document.sentences.sentence.pop().expect(
-        "assuming lightblue always return one sentence even it have two more input sentences",
-    );
-    Ok(parsed_input)
+    Ok("a")
 }
