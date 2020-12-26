@@ -40,3 +40,21 @@ pub fn lightblue(
     let semantic_representation = parse_lightblue_sr(output);
     Ok(semantic_representation)
 }
+
+pub fn format_sr(input: &str) -> String {
+    let mut level = 0;
+    let mut ret = String::new();
+    for c in input.chars() {
+        level += match c {
+            '(' => 1,
+            ')' => -1,
+            _ => 0,
+        };
+        let new_c = match c {
+            'x' => c.to_string(),
+            _ => c.to_string(),
+        };
+        ret.push_str(&new_c);
+    }
+    ret
+}
