@@ -42,19 +42,33 @@ pub fn lightblue(
 }
 
 pub fn format_sr(input: &str) -> String {
-    let mut level = 0;
-    let mut ret = String::new();
+    let mut position = 0;
+    let mut open_paren_position: Vec<usize> = vec![];
+    let mut formatted = String::new();
     for c in input.chars() {
-        level += match c {
-            '(' => 1,
-            ')' => -1,
-            _ => 0,
+        // dbg!(&open_paren_position);
+        // dbg!(&c);
+        match c {
+            '(' => open_paren_position.push(position),
+            ')' => {
+                let _ = open_paren_position.pop().expect("paren should complete");
+            }
+            _ => (),
         };
-        let new_c = match c {
-            'x' => c.to_string(),
-            _ => c.to_string(),
+        let (new_c, new_position) = match c {
+            '×' => {
+                let new_lined_position = *open_paren_position.last().unwrap_or(&0usize);
+                let indent = &" ".repeat(new_lined_position);
+                (
+                    ["\n", indent, "×", "\n", indent].concat(),
+                    new_lined_position,
+                )
+            }
+            ' ' => ("".to_string(), position),
+            _ => (c.to_string(), position + 1),
         };
-        ret.push_str(&new_c);
+        position = new_position;
+        formatted.push_str(&new_c);
     }
-    ret
+    formatted
 }
