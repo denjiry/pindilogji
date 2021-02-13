@@ -5,6 +5,8 @@
 
 use seed::{prelude::*, *};
 
+const ENTER_KEY: &str = "Enter";
+
 // ------ ------
 //     Init
 // ------ ------
@@ -12,7 +14,8 @@ use seed::{prelude::*, *};
 // `init` describes what should happen when your app started.
 fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
     Model {
-        terms: vec![Term::new()],
+        term: Term::new(),
+        user_message: String::new(),
     }
 }
 
@@ -36,51 +39,73 @@ impl Term {
 
 // `Model` describes our app state.
 struct Model {
-    terms: Vec<Term>,
+    term: Term,
+    user_message: String,
 }
 
 // ------ ------
 //    Update
 // ------ ------
 
-// (Remove the line below once any of your `Msg` variants doesn't implement `Copy`.)
-#[derive(Clone)]
 // `Msg` describes the different events you can modify state with.
 enum Msg {
-    CreateTerm,
+    WordChanged(String),
+    SendTerm,
+    Fetched(fetch::Result<String>),
 }
 
 // `update` describes how to handle each `Msg`.
-fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
+fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
     match msg {
-        Msg::CreateTerm => model.terms.push(Term::new()),
+        Msg::WordChanged(new_word) => model.term.word = new_word,
+        Msg::SendTerm => {
+            orders.skip().perform_cmd({
+                let word = model.term.word.clone();
+                async { Msg::Fetched(send_message(word).await) }
+            });
+        }
+        Msg::Fetched(Ok(lambda)) => {
+            model.user_message = "success".to_string();
+            model.term.lambda = lambda
+        }
+        Msg::Fetched(Err(error)) => model.user_message = format!("{:#?}", error),
     }
+}
+
+async fn send_message(new_word: String) -> fetch::Result<String> {
+    Request::new("127.0.0.1:8080/newterm")
+        .method(Method::Post)
+        .json(&new_word)?
+        .fetch()
+        .await?
+        .check_status()?
+        .json()
+        .await
 }
 
 // ------ ------
 //     View
 // ------ ------
 
-fn view_term(term: &Term) -> Node<Msg> {
+// `view` describes what to display.
+fn view(model: &Model) -> Node<Msg> {
+    let term = &model.term;
     div![
         C!["term"],
         input![
             C!["input"],
             attrs! {
                 At::Value => term.word,
-            }
+            },
+            input_ev(Ev::Input, Msg::WordChanged),
+            keyboard_ev(Ev::KeyDown, |keyboard_event| {
+                IF!(keyboard_event.key() == ENTER_KEY => Msg::SendTerm)
+            }),
         ],
-        term.lambda.to_string(),
+        button!("send", ev(Ev::Click, |_| Msg::SendTerm)),
+        li!(&model.user_message),
+        div![term.lambda.to_string()],
     ]
-}
-
-// `view` describes what to display.
-fn view(model: &Model) -> Vec<Node<Msg>> {
-    let mut ret: Vec<Node<Msg>> = vec![];
-    for term in &model.terms {
-        ret.push(view_term(term));
-    }
-    ret
 }
 
 // ------ ------
