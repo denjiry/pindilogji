@@ -22,10 +22,21 @@ async fn app2() -> Result<acfs::NamedFile> {
     )?)
 }
 
+#[get("/newterm")]
+async fn newterm() -> Result<HttpResponse> {
+    Ok(HttpResponse::build(StatusCode::OK).body("new"))
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(index).service(app).service(app2))
-        .bind("127.0.0.1:8080")?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .service(index)
+            .service(app)
+            .service(app2)
+            .service(newterm)
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
 }
