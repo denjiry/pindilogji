@@ -4,6 +4,7 @@
 #![allow(clippy::wildcard_imports)]
 
 use seed::{prelude::*, *};
+use serde::{Deserialize, Serialize};
 
 const ENTER_KEY: &str = "Enter";
 
@@ -23,6 +24,7 @@ fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
 //     Model
 // ------ ------
 type Lambda = String;
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct Term {
     word: String,
     lambda: Lambda,
@@ -51,7 +53,7 @@ struct Model {
 enum Msg {
     WordChanged(String),
     SendTerm,
-    Fetched(fetch::Result<String>),
+    Fetched(fetch::Result<Term>),
 }
 
 // `update` describes how to handle each `Msg`.
@@ -60,22 +62,22 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
         Msg::WordChanged(new_word) => model.term.word = new_word,
         Msg::SendTerm => {
             orders.skip().perform_cmd({
-                let word = model.term.word.clone();
-                async { Msg::Fetched(send_message(word).await) }
+                let term = model.term.clone();
+                async { Msg::Fetched(send_message(term).await) }
             });
         }
-        Msg::Fetched(Ok(lambda)) => {
+        Msg::Fetched(Ok(term)) => {
             model.user_message = "success".to_string();
-            model.term.lambda = lambda
+            model.term = term
         }
         Msg::Fetched(Err(error)) => model.user_message = format!("{:#?}", error),
     }
 }
 
-async fn send_message(new_word: String) -> fetch::Result<String> {
+async fn send_message(new_term: Term) -> fetch::Result<Term> {
     Request::new("/newterm")
         .method(Method::Post)
-        .json(&new_word)?
+        .json(&new_term)?
         .fetch()
         .await?
         .check_status()?

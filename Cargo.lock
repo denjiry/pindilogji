@@ -1288,6 +1288,7 @@ dependencies = [
  "actix-web",
  "env_logger",
  "pindilogji",
+ "serde",
 ]
 
 [[package]]
@@ -1295,6 +1296,7 @@ name = "pindilogji-ui"
 version = "0.1.0"
 dependencies = [
  "seed",
+ "serde",
  "wasm-bindgen-test",
 ]
 

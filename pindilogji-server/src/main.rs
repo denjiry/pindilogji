@@ -2,6 +2,7 @@ use actix_files as acfs;
 use actix_web::http::StatusCode;
 use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder, Result};
 use pindilogji::{format_sr, lightblue};
+use serde::{Deserialize, Serialize};
 
 #[get("/")]
 async fn index() -> Result<HttpResponse> {
@@ -22,9 +23,17 @@ async fn app2() -> Result<acfs::NamedFile> {
     )?)
 }
 
+type Lambda = String;
+#[derive(Debug, Serialize, Deserialize)]
+struct Term {
+    word: String,
+    lambda: Lambda,
+}
+
 #[post("/newterm")]
-async fn newterm() -> Result<HttpResponse> {
-    Ok(HttpResponse::build(StatusCode::OK).body("new"))
+async fn newterm(item: web::Json<Term>) -> Result<HttpResponse> {
+    let ret_term = item.into_inner();
+    Ok(HttpResponse::Ok().json(ret_term))
 }
 
 #[actix_web::main]
