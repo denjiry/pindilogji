@@ -73,7 +73,7 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
 }
 
 async fn send_message(new_word: String) -> fetch::Result<String> {
-    Request::new("127.0.0.1:8080/newterm")
+    Request::new("/newterm")
         .method(Method::Post)
         .json(&new_word)?
         .fetch()

@@ -22,7 +22,7 @@ async fn app2() -> Result<acfs::NamedFile> {
     )?)
 }
 
-#[get("/newterm")]
+#[post("/newterm")]
 async fn newterm() -> Result<HttpResponse> {
     Ok(HttpResponse::build(StatusCode::OK).body("new"))
 }
