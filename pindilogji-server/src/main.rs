@@ -32,7 +32,16 @@ struct Term {
 
 #[post("/newterm")]
 async fn newterm(item: web::Json<Term>) -> Result<HttpResponse> {
-    let ret_term = item.into_inner();
+    let Term { word, lambda: _ } = item.into_inner();
+    let lambda = match lightblue(&word) {
+        Ok(lambda) => lambda,
+        Err(error) => {
+            let error_msg = format!("{:?}", error);
+            return Ok(HttpResponse::InternalServerError().body(error_msg));
+        }
+    };
+    let lambda = format_sr(&lambda);
+    let ret_term = Term { word, lambda };
     Ok(HttpResponse::Ok().json(ret_term))
 }
 
