@@ -1,6 +1,6 @@
 use actix_files as acfs;
 use actix_web::http::StatusCode;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder, Result};
 use pindilogji::{format_sr, lightblue};
 
 #[get("/")]
@@ -29,8 +29,12 @@ async fn newterm() -> Result<HttpResponse> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    std::env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
+    env_logger::init();
+
     HttpServer::new(|| {
         App::new()
+            .wrap(middleware::Logger::default())
             .service(index)
             .service(app)
             .service(app2)
