@@ -1,7 +1,7 @@
 use actix_files as acfs;
 use actix_web::http::StatusCode;
 use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder, Result};
-use pindilogji::{format_sr, lightblue};
+use pindilogji::lightblue;
 use serde::{Deserialize, Serialize};
 
 #[get("/")]
@@ -40,7 +40,6 @@ async fn newterm(item: web::Json<Term>) -> Result<HttpResponse> {
             return Ok(HttpResponse::InternalServerError().body(error_msg));
         }
     };
-    let lambda = format_sr(&lambda);
     let ret_term = Term { word, lambda };
     Ok(HttpResponse::Ok().json(ret_term))
 }
